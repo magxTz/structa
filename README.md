@@ -1,4 +1,4 @@
-Structa – Lightweight Reflective Struct Framework for Embedded C++
+## Structa – Lightweight Reflective Struct Framework for Embedded C++ ##
 
 Structa is a **lightweight, macro-based data modeling framework** for embedded C++ projects (Arduino, ESP32, etc.) that automates JSON serialization, deserialization, memory tracking, and documentation. It’s designed to make defining and managing structured data effortless, while staying fast and memory efficient.
 
