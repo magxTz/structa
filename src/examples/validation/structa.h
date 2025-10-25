@@ -411,100 +411,135 @@ struct structName : public JsonStruct {                                         
         }                                                                             \
         Serial.println("===========================");                               \
     }                                                                                \
-    static void showMacroWritingGuide() {                                            \
-        Serial.println("╔════════════════════════════════════════════════════════╗"); \
-        Serial.println("║        STRUCTA MACRO WRITING GUIDE                     ║"); \
-        Serial.println("╚════════════════════════════════════════════════════════╝"); \
-        Serial.println();                                                            \
-        Serial.println("1. BASIC SYNTAX");                                           \
-        Serial.println("   #define STRUCT_NAME_FIELDS(field) \\");                   \
-        Serial.println("       field(Type, name, META_RULE) \\");                    \
-        Serial.println("       field(Type, name, META_RULE) \\");                    \
-        Serial.println("       field(Type, name, META_RULE)");                       \
-        Serial.println();                                                            \
-        Serial.println("   DEFINE_STRUCTA(StructName, STRUCT_NAME_FIELDS)");         \
-        Serial.println();                                                            \
-        Serial.println("2. FIELD PATTERN: field(TYPE, NAME, METADATA)");             \
-        Serial.println("   - TYPE: int, float, bool, String, or custom struct");    \
-        Serial.println("   - NAME: variable identifier (camelCase recommended)");   \
-        Serial.println("   - METADATA: validation rule (see section 5)");           \
-        Serial.println();                                                            \
-        Serial.println("3. IMPORTANT RULES");                                        \
-        Serial.println("   ✓ Each line ends with \\ (except last line)");            \
-        Serial.println("   ✓ NO semicolons at end of field lines");                 \
-        Serial.println("   ✓ NO commas between field definitions");                 \
-        Serial.println("   ✓ NO comments inside the macro");                        \
-        Serial.println("   ✓ Exactly 3 args per field: (type, name, meta)");        \
-        Serial.println();                                                            \
-        Serial.println("4. CORRECT EXAMPLE");                                        \
-        Serial.println("   #define USER_FIELDS(field) \\");                          \
-        Serial.println("       field(String, username, META_STRLEN(3, 20)) \\");     \
-        Serial.println("       field(int, age, META_RANGE(18, 100)) \\");            \
-        Serial.println("       field(bool, active, META_NONE())");                   \
-        Serial.println();                                                            \
-        Serial.println("   DEFINE_STRUCTA(User, USER_FIELDS)");                      \
-        Serial.println();                                                            \
-        Serial.println("5. METADATA OPTIONS");                                       \
-        Serial.println("   META_NONE()           - No validation");                  \
-        Serial.println("   META_OPTIONAL()       - Optional, validated if present"); \
-        Serial.println("   META_RANGE(min, max)  - Numeric range validation");      \
-        Serial.println("   META_STRLEN(min, max) - String length validation");      \
-        Serial.println("   META_ENUM(array)      - Enum value validation");         \
-        Serial.println();                                                            \
-        Serial.println("6. SHORTHAND MACROS (Optional)");                            \
-        Serial.println("   Define once at top of file:");                            \
-        Serial.println("   #define V(t,n,m) field(t,n,m)  // Validated");            \
-        Serial.println("   #define N(t,n) field(t,n,META_NONE())  // Not validated");\
-        Serial.println("   #define O(t,n) field(t,n,META_OPTIONAL())  // Optional"); \
-        Serial.println();                                                            \
-        Serial.println("   Usage:");                                                 \
-        Serial.println("   #define USER_FIELDS(field) \\");                          \
-        Serial.println("       V(String, name, META_STRLEN(3,20)) \\");              \
-        Serial.println("       V(int, age, META_RANGE(18,100)) \\");                 \
-        Serial.println("       O(String, email) \\");                                \
-        Serial.println("       N(bool, internal)");                                  \
-        Serial.println();                                                            \
-        Serial.println("7. COMMON MISTAKES");                                        \
-        Serial.println("   ✗ field(String, name,, META_NONE())  // double comma");  \
-        Serial.println("   ✗ field(String, name, META_NONE());  // semicolon");     \
-        Serial.println("   ✗ field(String, name, META_NONE()) \\  // comment");     \
-        Serial.println("       field(int, age, META_NONE())  // missing \\");        \
-        Serial.println();                                                            \
-        Serial.println("8. NESTED STRUCTS");                                         \
-        Serial.println("   Define inner struct first:");                             \
-        Serial.println("   #define ADDRESS_FIELDS(field) \\");                       \
-        Serial.println("       field(String, city, META_NONE()) \\");                \
-        Serial.println("       field(int, zip, META_NONE())");                       \
-        Serial.println("   DEFINE_STRUCTA(Address, ADDRESS_FIELDS)");                \
-        Serial.println();                                                            \
-        Serial.println("   Then use in outer struct:");                              \
-        Serial.println("   #define USER_FIELDS(field) \\");                          \
-        Serial.println("       field(String, name, META_STRLEN(3,20)) \\");          \
-        Serial.println("       field(Address, address, META_OPTIONAL())");           \
-        Serial.println("   DEFINE_STRUCTA(User, USER_FIELDS)");                      \
-        Serial.println();                                                            \
-        Serial.println("9. ENUM VALIDATION");                                        \
-        Serial.println("   Declare array BEFORE field definition:");                 \
-        Serial.println("   const char* roles[] = {\"admin\", \"user\", \"guest\"};");\
-        Serial.println();                                                            \
-        Serial.println("   #define USER_FIELDS(field) \\");                          \
-        Serial.println("       field(String, role, META_ENUM(roles))");              \
-        Serial.println();                                                            \
-        Serial.println("10. COMPLETE EXAMPLE");                                      \
-        Serial.println("    const char* status[] = {\"active\", \"inactive\"};");    \
-        Serial.println();                                                            \
-        Serial.println("    #define DEVICE_FIELDS(field) \\");                       \
-        Serial.println("        field(String, deviceId, META_STRLEN(5,20)) \\");     \
-        Serial.println("        field(String, status, META_ENUM(status)) \\");       \
-        Serial.println("        field(float, temp, META_RANGE(-40.0,125.0)) \\");    \
-        Serial.println("        field(int, battery, META_RANGE(0,100)) \\");         \
-        Serial.println("        field(bool, online, META_NONE()) \\");               \
-        Serial.println("        field(String, notes, META_OPTIONAL())");             \
-        Serial.println();                                                            \
-        Serial.println("    DEFINE_STRUCTA(Device, DEVICE_FIELDS)");                 \
-        Serial.println();                                                            \
-        Serial.println("════════════════════════════════════════════════════════"); \
-    }                                                                                \
+                                                                             \
+};
+
+// ======================================================
+// Helper Class for Guidance
+// ======================================================
+class StructaHelper {
+public:
+    static void showMacroWritingGuide() {
+        Serial.println("╔════════════════════════════════════════════════════════╗");
+        Serial.println("║        STRUCTA MACRO WRITING GUIDE                     ║");
+        Serial.println("╚════════════════════════════════════════════════════════╝");
+        Serial.println();
+        Serial.println("1. BASIC SYNTAX");
+        Serial.println("   #define STRUCT_NAME_FIELDS(field) \\");
+        Serial.println("       field(Type, name, META_RULE) \\");
+        Serial.println("       field(Type, name, META_RULE) \\");
+        Serial.println("       field(Type, name, META_RULE)");
+        Serial.println();
+        Serial.println("   DEFINE_STRUCTA(StructName, STRUCT_NAME_FIELDS)");
+        Serial.println();
+        Serial.println("2. FIELD PATTERN: field(TYPE, NAME, METADATA)");
+        Serial.println("   - TYPE: int, float, bool, String, or custom struct");
+        Serial.println("   - NAME: variable identifier (camelCase recommended)");
+        Serial.println("   - METADATA: validation rule (see section 5)");
+        Serial.println();
+        Serial.println("3. IMPORTANT RULES");
+        Serial.println("   ✓ Each line ends with \\ (except last line)");
+        Serial.println("   ✓ NO semicolons at end of field lines");
+        Serial.println("   ✓ NO commas between field definitions");
+        Serial.println("   ✓ NO comments inside the macro");
+        Serial.println("   ✓ Exactly 3 args per field: (type, name, meta)");
+        Serial.println();
+        Serial.println("4. CORRECT EXAMPLE");
+        Serial.println("   #define USER_FIELDS(field) \\");
+        Serial.println("       field(String, username, META_STRLEN(3, 20)) \\");
+        Serial.println("       field(int, age, META_RANGE(18, 100)) \\");
+        Serial.println("       field(bool, active, META_NONE())");
+        Serial.println();
+        Serial.println("   DEFINE_STRUCTA(User, USER_FIELDS)");
+        Serial.println();
+        Serial.println("5. METADATA OPTIONS");
+        Serial.println("   META_NONE()           - No validation");
+        Serial.println("   META_OPTIONAL()       - Optional, validated if present");
+        Serial.println("   META_RANGE(min, max)  - Numeric range validation");
+        Serial.println("   META_STRLEN(min, max) - String length validation");
+        Serial.println("   META_ENUM(array)      - Enum value validation");
+        Serial.println();
+        Serial.println("6. SHORTHAND MACROS (Optional)");
+        Serial.println("   Define once at top of file:");
+        Serial.println("   #define V(t,n,m) field(t,n,m)  // Validated");
+        Serial.println("   #define N(t,n) field(t,n,META_NONE())  // Not validated");
+        Serial.println("   #define O(t,n) field(t,n,META_OPTIONAL())  // Optional");
+        Serial.println();
+        Serial.println("   Usage:");
+        Serial.println("   #define USER_FIELDS(field)             \\");
+        Serial.println("       V(String, name, META_STRLEN(3,20)) \\");
+        Serial.println("       V(int, age, META_RANGE(18,100))    \\");
+        Serial.println("       O(String, email)                   \\");
+        Serial.println("       N(bool, internal)");
+        Serial.println();
+        Serial.println("7. COMMON MISTAKES");
+        Serial.println("   ✗ field(String, name,, META_NONE())  // double comma");
+        Serial.println("   ✗ field(String, name, META_NONE());  // semicolon");
+        Serial.println("   ✗ field(String, name, META_NONE()) \\  // comment");
+        Serial.println("       field(int, age, META_NONE())  // missing \\");
+        Serial.println();
+        Serial.println("8. NESTED STRUCTS");
+        Serial.println("   Define inner struct first:");
+        Serial.println("   #define ADDRESS_FIELDS(field)              \\");
+        Serial.println("       field(String, city, META_NONE())       \\");
+        Serial.println("       field(int, zip, META_NONE())");
+        Serial.println("   DEFINE_STRUCTA(Address, ADDRESS_FIELDS)");
+        Serial.println();
+        Serial.println("   Then use in outer struct:");
+        Serial.println("   #define USER_FIELDS(field)                 \\");
+        Serial.println("       field(String, name, META_STRLEN(3,20)) \\");
+        Serial.println("       field(Address, address, META_OPTIONAL())");
+        Serial.println("   DEFINE_STRUCTA(User, USER_FIELDS)");
+        Serial.println();
+        Serial.println("9. ENUM VALIDATION");
+        Serial.println("   Declare array BEFORE field definition:");
+        Serial.println("   const char* roles[] = {\"admin\", \"user\", \"guest\"};");
+        Serial.println();
+        Serial.println("   #define USER_FIELDS(field) \\");
+        Serial.println("       field(String, role, META_ENUM(roles))");
+        Serial.println();
+        Serial.println("10. COMPLETE EXAMPLE");
+        Serial.println("    const char* status[] = {\"active\", \"inactive\"};");
+        Serial.println();
+        Serial.println("    #define DEVICE_FIELDS(field)                    \\");
+        Serial.println("        field(String, deviceId, META_STRLEN(5,20))  \\");
+        Serial.println("        field(String, status, META_ENUM(status))    \\");
+        Serial.println("        field(float, temp, META_RANGE(-40.0,125.0)) \\");
+        Serial.println("        field(int, battery, META_RANGE(0,100))      \\");
+        Serial.println("        field(bool, online, META_NONE())            \\");
+        Serial.println("        field(String, notes, META_OPTIONAL())");
+        Serial.println();
+        Serial.println("    DEFINE_STRUCTA(Device, DEVICE_FIELDS)");
+        Serial.println();
+        Serial.println("════════════════════════════════════════════════════════");
+    }
+    
+    static void showQuickReference() {
+        Serial.println("╔═══════════════════════════════════╗");
+        Serial.println("║  STRUCTA QUICK REFERENCE          ║");
+        Serial.println("╚═══════════════════════════════════╝");
+        Serial.println();
+        Serial.println("VALIDATION MACROS:");
+        Serial.println("  META_NONE()              No validation");
+        Serial.println("  META_OPTIONAL()          Optional field");
+        Serial.println("  META_RANGE(min, max)     Numeric range");
+        Serial.println("  META_STRLEN(min, max)    String length");
+        Serial.println("  META_ENUM(array)         Enum values");
+        Serial.println();
+        Serial.println("SHORTHAND (define yourself):");
+        Serial.println("  V(t,n,m)  Validated field");
+        Serial.println("  N(t,n)    No validation");
+        Serial.println("  O(t,n)    Optional");
+        Serial.println();
+        Serial.println("METHODS:");
+        Serial.println("  .serialize()             → String");
+        Serial.println("  .serializeWithResult()   → Result<String>");
+        Serial.println("  ::deserialize(json)      → Struct");
+        Serial.println("  ::deserializeWithResult(json) → Result<Struct>");
+        Serial.println("  ::printSchema()          Show fields");
+        Serial.println();
+        Serial.println("══════════════════════════════════");
+    }
 };
 
 #endif // STRUCTA_H
