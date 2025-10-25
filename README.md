@@ -34,70 +34,85 @@ Structa is a **lightweight, macro-based data modeling framework** for embedded C
 
 ### 2. Define Your Struct
 
-    #define PERSON_FIELDS(field) \
-        field(String, name) \
-        field(int, age) \
-        field(float, weight)
-    
-    DEFINE_STRUCTA(Person, PERSON_FIELDS)
+```cpp
+#define PERSON_FIELDS(field) \
+    field(String, name) \
+    field(int, age) \
+    field(float, weight)
+
+DEFINE_STRUCTA(Person, PERSON_FIELDS)
+```
 
 ### 3. Use It
 
-    Person p;
-    p.name = "Alex";
-    p.age = 30;
-    p.weight = 72.5;
-    
-    String json = p.serialize();
-    Serial.println(json); // {"name":"Alex","age":30,"weight":72.50}
+```cpp
+Person p;
+p.name = "Alex";
+p.age = 30;
+p.weight = 72.5;
+
+String json = p.serialize();
+Serial.println(json); // {"name":"Alex","age":30,"weight":72.50}
+```
 
 * * *
 
 🧠 Advanced Example
-    #define SENSOR_FIELDS(field) \
-        field(String, deviceId) \
-        field(float, temperature) \
-        field(float, humidity) \
-        field(unsigned long, timestamp)
-    DEFINE_STRUCTA(Sensor, SENSOR_FIELDS)
 
-    void setup() {
-      Serial.begin(115200);
+```cpp
+#define SENSOR_FIELDS(field) \ 
+field(String, deviceId) \ 
+field(float, temperature) \ 
+field(float, humidity) \ 
+field(unsigned long, timestamp) 
+DEFINE_STRUCTA(Sensor, SENSOR_FIELDS) 
 
-      Sensor s;
-      s.deviceId = "TEMP01";
-      s.temperature = 26.4;
-      s.humidity = 58.3;
-      s.timestamp = millis();
+void setup() { 
+    Serial.begin(115200); 
+    Sensor s; 
+    s.deviceId = "TEMP01"; 
+    s.temperature = 26.4; 
+    s.humidity = 58.3; 
+    s.timestamp = millis(); 
+    auto json = s.serialize(); 
+    Serial.println(json); 
+    Sensor copy = Sensor::deserialize(json); 
+    copy.printCurrentValues(); 
+}
+void loop(){
 
-      auto json = s.serialize();
-      Serial.println(json);
-
-      Sensor copy = Sensor::deserialize(json);
-      copy.printCurrentValues();
-    }
+}
+```
 
 * * *
 
 🧩 Nested Struct Example
-    #define GPS_FIELDS(field) \
-        field(float, latitude) \
-        field(float, longitude)
-    DEFINE_STRUCTA(GPS, GPS_FIELDS)
 
-    #define LOCATION_FIELDS(field) \
-        field(String, name) \
-        field(GPS, coordinates)
+```cpp
+#define GPS_FIELDS(field) \ 
+    field(float, latitude) \ 
+    field(float, longitude) 
 
-    DEFINE_STRUCTA(Location, LOCATION_FIELDS)
+DEFINE_STRUCTA(GPS, GPS_FIELDS) 
+
+#define LOCATION_FIELDS(field) \ 
+field(String, name) \ 
+field(GPS, coordinates) 
+DEFINE_STRUCTA(Location, LOCATION_FIELDS)
+```
+
+
 
 * * *
 
 🧰 Error Handling
-    auto result = Person::deserializeWithResult(json);
-    if (!result.success) {
-      Serial.println(result.error.toString());
-    }
+
+```cpp
+auto result = Person::deserializeWithResult(json); 
+if (!result.success) { 
+    Serial.println(result.error.toString()); 
+}
+```
 
 Errors include:
 
@@ -114,7 +129,12 @@ Errors include:
 * * *
 
 💾 Memory Tracking
-    MemoryTracker::printStats();
+
+```cpp
+MemoryTracker::printStats();
+```
+
+
     // Output: Memory - Current: 512 bytes, Peak: 1024 bytes
 
 * * *
