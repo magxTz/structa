@@ -134,7 +134,6 @@ Errors include:
 MemoryTracker::printStats();
 ```
 
-
     // Output: Memory - Current: 512 bytes, Peak: 1024 bytes
 
 * * *
@@ -148,16 +147,21 @@ MemoryTracker::printStats();
 * * *
 
 📦 Folder Structure
-    Structa/
-    ├── src/
-    │   ├── Structa.h
-    │   └── examples/
-    │       ├── person_example/
-    │       │   ├── person.ino
-    │       │   └── dataModel.h
-    ├── README.md
-    ├── LICENSE
-    └── library.properties
+
+```cpp
+Structa/ 
+├── src/ 
+│ ├── Structa.h 
+│ └── examples/ 
+│ ├── person_example/ 
+│ │ ├── person.ino 
+│ │ └── dataModel.h 
+├── README.md 
+├── LICENSE 
+└── library.properties
+```
+
+
 
 * * *
 
@@ -203,6 +207,16 @@ Automatically generates:
 
 🧑‍💻 Author
 
-Developed by **Alex Gabriel Malisa**📧 [alexgabrielmalisa@gmail.com](mailto:alexgabrielmalisa@gmail.com)📱 +255 753 007 128
+Developed by **Alex Gabriel Malisa**
 
-**License:** MIT**Dependencies:** ArduinoJson**Compatibility:** Arduino IDE, PlatformIO
+📧 [alexgabrielmalisa@gmail.com](mailto:alexgabrielmalisa@gmail.com)
+
+📱 +255 753 007 128
+
+**License:** MIT
+
+**Dependency:** ArduinoJson
+
+**Compatibility:** Arduino IDE, PlatformIO
+
+
