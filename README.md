@@ -60,11 +60,11 @@ Serial.println(json); // {"name":"Alex","age":30,"weight":72.50}
 🧠 Advanced Example
 
 ```cpp
-#define SENSOR_FIELDS(field) \ 
-field(String, deviceId) \ 
-field(float, temperature) \ 
-field(float, humidity) \ 
-field(unsigned long, timestamp) 
+#define SENSOR_FIELDS(field)        \ 
+    field(String, deviceId)         \ 
+    field(float, temperature)       \ 
+    field(float, humidity)          \ 
+    field(unsigned long, timestamp) 
 DEFINE_STRUCTA(Sensor, SENSOR_FIELDS) 
 
 void setup() { 
@@ -90,14 +90,14 @@ void loop(){
 
 ```cpp
 #define GPS_FIELDS(field) \ 
-    field(float, latitude) \ 
-    field(float, longitude) 
-
+    field(float, latitude) \ 
+    field(float, longitude) 
+    
 DEFINE_STRUCTA(GPS, GPS_FIELDS) 
 
-#define LOCATION_FIELDS(field) \ 
-field(String, name) \ 
-field(GPS, coordinates) 
+#define LOCATION_FIELDS(field)  \ 
+    field(String, name)             \ 
+    field(GPS, coordinates) 
 DEFINE_STRUCTA(Location, LOCATION_FIELDS)
 ```
 
@@ -179,12 +179,17 @@ Automatically generates:
 
 * `printStructDefinition()` / `printFieldInfo()` / `printCurrentValues()`
 
+* `showMacroWritingGuide()`
+
 ### Example
 
-    Person::printStructDefinition();
-    Person::printFieldInfo();
-    Person p;
-    p.printCurrentValues();
+```cpp
+Person::printStructDefinition();
+Person::printFieldInfo();
+MemoryTracker::showMacroWritingGuide();
+Person p;
+p.printCurrentValues();
+```
 
 * * *
 
@@ -201,7 +206,15 @@ Automatically generates:
 
 💡 Best Practices
 
-✅ Use consistent, clear field names✅ Keep structures small for embedded environments✅ Use nested structs for logical grouping✅ Monitor memory usage during development✅ Handle deserialization errors explicitly
+✅ Use consistent, clear field names
+
+✅ Keep structures small for embedded environments
+
+✅ Use nested structs for logical grouping
+
+✅ Monitor memory usage during development
+
+✅ Handle deserialization errors explicitly
 
 * * *
 
@@ -218,5 +231,3 @@ Developed by **Alex Gabriel Malisa**
 **Dependency:** ArduinoJson
 
 **Compatibility:** Arduino IDE, PlatformIO
-
-
