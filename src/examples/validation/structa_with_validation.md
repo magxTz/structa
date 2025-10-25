@@ -1,6 +1,7 @@
 # Structa Library v2.4 - Complete API Documentation
 
 ## Table of Contents
+
 1. [Overview](#overview)
 2. [Quick Start](#quick-start)
 3. [Core Concepts](#core-concepts)
@@ -17,6 +18,7 @@
 ## Overview
 
 **Structa** is a metadata-aware serialization library for Arduino that provides:
+
 - ✅ Type-safe JSON serialization/deserialization
 - ✅ Built-in field validation (ranges, lengths, enums)
 - ✅ Nested struct support
@@ -32,12 +34,14 @@
 ### Basic Setup
 
 **1. Include the library:**
+
 ```cpp
 #include <Arduino.h>
 #include "structa.h"
 ```
 
 **2. Define your data model** (typically in `dataModel.h`):
+
 ```cpp
 // Define field list macro
 #define USER_FIELDS(field) \
@@ -50,20 +54,21 @@ DEFINE_STRUCTA(User, USER_FIELDS)
 ```
 
 **3. Use it in your main code:**
+
 ```cpp
 void setup() {
     Serial.begin(115200);
-    
+
     // Create and populate
     User user;
     user.username = "john";
     user.age = 25;
     user.active = true;
-    
+
     // Serialize
     String json = user.serialize();
     Serial.println(json); // {"username":"john","age":25,"active":true}
-    
+
     // Deserialize
     User loaded = User::deserialize(json);
 }
@@ -85,6 +90,7 @@ Structa uses **X-Macros** to define fields once and generate multiple code paths
 ```
 
 **The macro pattern:** `field(TYPE, NAME, METADATA)`
+
 - `TYPE`: C++ type (int, float, String, bool, or custom struct)
 - `NAME`: Field name (variable identifier)
 - `METADATA`: Validation rules using META_* macros
@@ -92,6 +98,7 @@ Structa uses **X-Macros** to define fields once and generate multiple code paths
 ### 2. How to Write Field Definition Macros
 
 **Template:**
+
 ```cpp
 #define STRUCT_NAME_FIELDS(field) \
     field(TYPE1, name1, META_RULE1) \
@@ -100,6 +107,7 @@ Structa uses **X-Macros** to define fields once and generate multiple code paths
 ```
 
 **Important Rules:**
+
 - ✅ Each line ends with `\` (except the last)
 - ✅ NO semicolons at the end of field lines
 - ✅ NO commas between field definitions
@@ -107,6 +115,7 @@ Structa uses **X-Macros** to define fields once and generate multiple code paths
 - ✅ Use exactly 3 arguments per field: `(type, name, meta)`
 
 **Example:**
+
 ```cpp
 // ✅ CORRECT
 #define PERSON_FIELDS(field) \
@@ -139,6 +148,7 @@ DEFINE_STRUCTA(StructName, FIELD_LIST_MACRO)
 ```
 
 This generates:
+
 - The struct with all fields
 - `serialize()` / `serializeWithResult()` methods
 - `deserialize()` / `deserializeWithResult()` static methods
@@ -154,6 +164,7 @@ This generates:
 ### Metadata Macros
 
 #### `META_NONE()`
+
 No validation - field is serialized/deserialized but never checked.
 
 ```cpp
@@ -162,6 +173,7 @@ field(bool, flag, META_NONE())
 ```
 
 #### `META_OPTIONAL()`
+
 Field can be missing in JSON, but validated if present.
 
 ```cpp
@@ -169,6 +181,7 @@ field(String, middleName, META_OPTIONAL())
 ```
 
 #### `META_OPTIONAL_UNVALIDATED()`
+
 Field is optional AND not validated.
 
 ```cpp
@@ -176,6 +189,7 @@ field(String, comments, META_OPTIONAL_UNVALIDATED())
 ```
 
 #### `META_RANGE(min, max)`
+
 Validates numeric values are within range (inclusive).
 
 ```cpp
@@ -184,6 +198,7 @@ field(float, temperature, META_RANGE(-40.0, 125.0))
 ```
 
 #### `META_STRLEN(minLen, maxLen)`
+
 Validates string length (inclusive).
 
 ```cpp
@@ -192,6 +207,7 @@ field(String, email, META_STRLEN(5, 100))
 ```
 
 #### `META_ENUM(arrayName)`
+
 Validates string is one of allowed values.
 
 ```cpp
@@ -218,6 +234,7 @@ For cleaner code, define these at the top of your `dataModel.h`:
 ```
 
 **Usage:**
+
 ```cpp
 #define USER_FIELDS(field) \
     V(String, username, META_STRLEN(3, 15)) \
@@ -235,13 +252,13 @@ For cleaner code, define these at the top of your `dataModel.h`:
 
 All fields are automatically type-checked unless using `META_NONE()`:
 
-| Type | Validation |
-|------|------------|
-| `int`, `long` | Must be integer in JSON |
-| `float`, `double` | Must be number in JSON |
-| `bool` | Must be `true` or `false` (not string/number) |
-| `String` | Must be string in JSON |
-| Custom structs | Must be valid JSON object |
+| Type              | Validation                                    |
+| ----------------- | --------------------------------------------- |
+| `int`, `long`     | Must be integer in JSON                       |
+| `float`, `double` | Must be number in JSON                        |
+| `bool`            | Must be `true` or `false` (not string/number) |
+| `String`          | Must be string in JSON                        |
+| Custom structs    | Must be valid JSON object                     |
 
 ### Validation Behavior
 
@@ -283,6 +300,7 @@ DEFINE_STRUCTA(User, USER_FIELDS)
 ```
 
 **Usage:**
+
 ```cpp
 User user;
 user.username = "john";
@@ -379,6 +397,7 @@ User::printSchema();
 ```
 
 **Output:**
+
 ```
 === User Schema ===
  - username [string]
@@ -438,6 +457,7 @@ project/
 ```
 
 **dataModel.h:**
+
 ```cpp
 #ifndef DATA_MODEL_H
 #define DATA_MODEL_H
@@ -484,12 +504,14 @@ DEFINE_STRUCTA(User, USER_FIELDS)
 ### 2. Validation Strategy
 
 **Use validation for:**
+
 - User input from APIs/forms
 - Configuration data
 - Critical system parameters
 - Data from untrusted sources
 
 **Skip validation (`META_NONE()`) for:**
+
 - Internal flags/state
 - Temporary working data
 - Performance-critical fields
@@ -556,7 +578,7 @@ void setup() {
     config.password = "secret123";
     config.port = 8080;
     config.enableLogging = true;
-    
+
     String json = config.serialize();
     saveToEEPROM(json);
 }
@@ -581,7 +603,7 @@ void loop() {
     data.humidity = readHumidity();
     data.timestamp = millis();
     data.valid = true;
-    
+
     auto result = data.serializeWithResult();
     if (result.success) {
         publishToMQTT(result.data);
@@ -624,18 +646,18 @@ DEFINE_STRUCTA(User, USER_FIELDS)
 
 void handleAPIRequest(String jsonPayload) {
     auto result = User::deserializeWithResult(jsonPayload);
-    
+
     if (!result.success) {
         sendError(400, result.error.toString());
         return;
     }
-    
+
     User user = result.data;
-    
+
     if (user.primaryDevice.location.latitude != 0) {
         processLocation(user.primaryDevice.location);
     }
-    
+
     sendSuccess(200, "User processed");
 }
 ```
@@ -668,27 +690,27 @@ DEFINE_STRUCTA(User, USER_FIELDS)
 ```cpp
 void processUserData(String jsonFromAPI) {
     auto result = User::deserializeWithResult(jsonFromAPI);
-    
+
     if (!result.success) {
         // Log detailed error
         Serial.println("Validation failed!");
         Serial.println("Error code: " + String((int)result.error.code));
         Serial.println("Message: " + result.error.message);
         Serial.println("Field: " + result.error.fieldPath);
-        
+
         // Send error response
         sendAPIError(400, result.error.toString());
-        
+
         // Try with default values
         User defaultUser;
         defaultUser.username = "guest";
         defaultUser.role = "guest";
         defaultUser.age = 18;
-        
+
         processUser(defaultUser);
         return;
     }
-    
+
     // Success - use validated data
     User user = result.data;
     processUser(user);
@@ -702,23 +724,28 @@ void processUserData(String jsonFromAPI) {
 ### Common Errors
 
 **1. "macro passed 4 arguments, but takes just 3"**
+
 - Check for double commas: `field(String, name,, META_NONE())`
 - Should be: `field(String, name, META_NONE())`
 
 **2. "stray '\' in program"**
+
 - Comments after `\` in macro definitions
 - Remove all `//` comments from inside macros
 
 **3. "cannot convert JsonObject to String"**
+
 - Using old version without nested struct fix
 - Update to latest version with `serializeJson()` fix
 
 **4. Validation always fails**
+
 - Check if using `META_NONE()` when you need validation
 - Verify enum array is defined before use
 - Check range values are correct type (float vs int)
 
 **5. Missing fields after deserialization**
+
 - Fields need `META_OPTIONAL()` to be optional
 - Without it, missing fields cause validation failure
 
@@ -727,17 +754,20 @@ void processUserData(String jsonFromAPI) {
 ## Performance Considerations
 
 ### Memory Usage
+
 - Each struct allocates a 512-byte `DynamicJsonDocument` temporarily
 - Nested structs create additional temporary documents
 - Memory is tracked and freed automatically
 
 ### Optimization Tips
+
 1. Use `META_NONE()` for non-critical fields to skip validation
 2. Keep field names short to reduce JSON size
 3. Avoid deep nesting (3+ levels)
 4. Use fixed-size buffers when possible
 
 ### Benchmarks (Arduino Uno)
+
 - Simple struct (5 fields): ~2ms serialize, ~3ms deserialize
 - Nested struct (2 levels): ~5ms serialize, ~7ms deserialize
 - Validation overhead: ~0.5ms per validated field
@@ -753,6 +783,7 @@ This library is provided as-is for use in Arduino projects.
 For issues, questions, or contributions, refer to your project documentation or contact the library maintainer.
 
 ---
+
 🧑‍💻 Author
 
 Developed by **Alex Gabriel Malisa**
