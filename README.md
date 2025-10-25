@@ -6,7 +6,23 @@ Structa is a **lightweight, macro-based data modeling framework** for embedded C
 
 🚀 Features
 
-✅ **Simple Macro-Based Definition** – Define structs with minimal code✅ **Automatic JSON Serialization/Deserialization** – Powered by ArduinoJson✅ **Comprehensive Error Handling** – Detailed messages with field paths✅ **Memory Tracking** – Track allocations and peak usage✅ **Nested Struct Support** – Works with complex hierarchical data✅ **Self-Documenting** – Auto-generates struct info and usage examples✅ **Reflection Utilities** – Print fields, definitions, and current values✅ **IoT-Ready** – Perfect for ESP32/ESP8266 and sensor data models
+✅ **Simple Macro-Based Definition** – Define structs with minimal code
+
+✅ **Automatic JSON Serialization/Deserialization** – Powered by ArduinoJson
+
+✅ **Comprehensive Error Handling** – Detailed messages with field paths
+
+✅ **Memory Tracking** – Track allocations and peak usage
+
+✅ **Nested Struct Support** – Works with complex hierarchical data
+
+✅ **Self-Documenting** – Auto-generates struct info and usage examples
+
+✅ **Reflection Utilities** – Print fields, definitions, and current values
+
+✅ **IoT-Ready** – Perfect for ESP32/ESP8266 and sensor data models
+
+
 
 * * *
 
@@ -43,7 +59,6 @@ Structa is a **lightweight, macro-based data modeling framework** for embedded C
         field(float, temperature) \
         field(float, humidity) \
         field(unsigned long, timestamp)
-
     DEFINE_STRUCTA(Sensor, SENSOR_FIELDS)
 
     void setup() {
@@ -68,7 +83,6 @@ Structa is a **lightweight, macro-based data modeling framework** for embedded C
     #define GPS_FIELDS(field) \
         field(float, latitude) \
         field(float, longitude)
-
     DEFINE_STRUCTA(GPS, GPS_FIELDS)
 
     #define LOCATION_FIELDS(field) \
