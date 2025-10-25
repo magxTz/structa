@@ -15,7 +15,7 @@
 
 ---
 
-* * *
+
 
 # Structa – Lightweight Reflective Struct Framework for Embedded C++
 
